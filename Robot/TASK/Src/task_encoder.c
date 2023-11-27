@@ -107,12 +107,14 @@ static void encoder_entry(void *param)
 				pwm_LB = pid_execute(pid_LB, vel_LB, set_velocity);
 				pwm_RB = pid_execute(pid_RB, vel_RB, set_velocity);
 				break;
+
 			case Robot_Backward:
 				pwm_LT = pid_execute(pid_LT, vel_LT, -set_velocity);
 				pwm_RT = pid_execute(pid_RT, vel_RT, -set_velocity);
 				pwm_LB = pid_execute(pid_LB, vel_LB, -set_velocity);
 				pwm_RB = pid_execute(pid_RB, vel_RB, -set_velocity);	
 				break;
+#if 1
 			case Robot_Right_Up:
 				pid_init(pid_LT, 1000,100,0);
 				pwm_RT = pid_execute(pid_RT, vel_RT, set_velocity);
@@ -165,39 +167,28 @@ static void encoder_entry(void *param)
 				pwm_LB = pid_execute(pid_LB, vel_LB, -set_velocity);
 				pwm_RB = pid_execute(pid_RB, vel_RB, set_velocity);
 				break;
+#endif
 		}
 		
-		
-		
-//		if(robot_get_dir() == Robot_Stop) // 如果机器人已经停止了，就不再进行PID计算，同时清除PWM与累积积分
-//		{	
-
-//		}
-//		else
-//		{
-//			pwm_LT = pid_execute(pid_LT, vel_LT, -0.5f);
-//			pwm_RT = pid_execute(pid_RT, vel_RT, -0.5f);
-//			pwm_LB = pid_execute(pid_LB, vel_LB, -0.5f);
-//			pwm_RB = pid_execute(pid_RB, vel_RB, -0.5f);
-//		}
 		motor_set_velocity(Wheel_LT, _abs_(pwm_LT));
 		motor_set_velocity(Wheel_RT, _abs_(pwm_RT));
 		motor_set_velocity(Wheel_LB, _abs_(pwm_LB));
 		motor_set_velocity(Wheel_RB, _abs_(pwm_RB));
 
 //		app_printf("\r\n");
-//		app_printf("pwm_LT = %d, vel = %.3fm/s\r\n", pwm_LT, vel_LT);
+//		app_printf("pwm_LT = %d, vel = %.3fm/s, counter_LT = %d\r\n", pwm_LT, vel_LT, counter_LT);
 //		app_printf("pwm_RT = %d, vel = %.3fm/s\r\n", pwm_RT, vel_RT);
 //		app_printf("pwm_LB = %d, vel = %.3fm/s\r\n", pwm_LB, vel_LB);
 //		app_printf("pwm_RB = %d, vel = %.3fm/s\r\n", pwm_RB, vel_RB);
-
+//		app_printf("%d %d %d %d\r\n", counter_LT, counter_RT, counter_LB, counter_RB);
 		float robot_velocity = (vel_LT+vel_RT+vel_LB+vel_RB)/4.0f;
 		data.value = robot_velocity * 1000;
-//		app_printf("robot_velocity = %.3f, v = %d\r\n", robot_velocity, data.value);
+		
 		userdata[0] = data.parts.lowByte;
 		userdata[1] = data.parts.highByte;
-		if((cnt++) % 50) // 10ms*50 = 500ms , 每500ms上传一次
+		if(((++cnt) % 50) == 0) // 10ms*50 = 500ms , 每500ms上传一次
 		{
+			//app_printf("robot_velocity = %.3f\r\n", robot_velocity);
 			protocol_send(Robot, RobotVelocity, userdata, 2); // 目前只有前后运动的速度
 			cnt = 0;
 		}

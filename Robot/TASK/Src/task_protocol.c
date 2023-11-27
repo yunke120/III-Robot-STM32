@@ -30,12 +30,12 @@ static void protocol_entry(void *param)
 	{
 		if (osMessageQueueGet(protocolQueueHandle, rx_buf, NULL, osWaitForever) == osOK)
 		{
-#if 1
+#if 0
 			for(int i = 0; i < PROTOCOL_MSG_LEN; i++)
 			{
 				printf("%02x ", rx_buf[i]);
 			}
-//			printf("\r\n");
+			printf("\r\n");
 #endif
 			// Todo:
 			device = (eDEVICE)rx_buf[1]; // 根据设备地址不同进行数据分发

@@ -101,8 +101,8 @@ void PROTOCOL_USART_IRQHandler(void)
 		if (rx_count == PROTOCOL_MSG_LEN)
 		{
 			rx_count = 0;
-			if (USART1_RX_BUF[10] == check_data(USART1_RX_BUF, 10))
-			{
+//			if (USART1_RX_BUF[10] == check_data(USART1_RX_BUF, 10))
+//			{
 #if 0
 				for(int i = 0; i < PROTOCOL_MSG_LEN; i++)
 				{
@@ -110,7 +110,7 @@ void PROTOCOL_USART_IRQHandler(void)
 				}
 #endif
 				osMessageQueuePut(protocolQueueHandle, USART1_RX_BUF, 0U, 0U);
-			}
+//			}
 		}
 	}
 

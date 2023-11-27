@@ -70,14 +70,14 @@ static void robot_entry(void *param)
 			case HandShake:
 				protocol_send(Robot, HandShake, data, 0);
 				break;
-			case RobotVelocity:		/* 设置机器人运行速度 */
-				v.parts.lowByte = buf[4];
-				v.parts.highByte = buf[5];
-				osMutexAcquire(robotVelocityMutexHandle, portMAX_DELAY);
-				robotSetVelocity = (float)v.value/1000.0;
-				osMutexRelease(robotVelocityMutexHandle);
-//				app_printf("v = %.2f", robotSetVelocity);
-				break;
+//			case RobotVelocity:		/* 设置机器人运行速度 */
+//				v.parts.lowByte = buf[4];
+//				v.parts.highByte = buf[5];
+//				osMutexAcquire(robotVelocityMutexHandle, portMAX_DELAY);
+//				robotSetVelocity = (float)v.value/1000.0;
+//				osMutexRelease(robotVelocityMutexHandle);
+////				app_printf("v = %.2f", robotSetVelocity);
+//				break;
 			default:
 				robot_set_dir((eRobotDir)buf[2]);
 				break;

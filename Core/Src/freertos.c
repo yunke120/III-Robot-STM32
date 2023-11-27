@@ -124,9 +124,9 @@ void StartDefaultTask(void *argument)
   while(1)
   {
 	vTaskSuspendAll();
-//	create_protocol_thread();
-//	create_robot_thread();
-//	create_encoder_thread();
+	create_protocol_thread();
+	create_robot_thread();
+	create_encoder_thread();
 //	create_posture_thread();
 	create_led_thread();
 	xTaskResumeAll();
